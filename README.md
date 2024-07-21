@@ -1,6 +1,6 @@
 **Python docs**
 
-**Gaals** Test Positron IDE with python code in the following tasks:
+**Goals** Test Positron IDE with python code in the following tasks:
 
 -  descriptive statistics
 -  convolutional neural networks
