@@ -1,4 +1,4 @@
-Python docs
+**Python docs**
 
 Space created with the objective of testing the Position IDE with python code in following tasks:
 
