@@ -1,6 +1,6 @@
 **Python docs**
 
-Space created with the objective of testing the Position IDE with python code in following tasks:
+**Gaals** Test Positron IDE with python code in the following tasks:
 
 -  descriptive statistics
 -  convolutional neural networks
