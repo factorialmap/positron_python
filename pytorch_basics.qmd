@@ -1,0 +1,120 @@
+---
+title: "Basics of Pytorch"
+format: html
+---
+
+### What is Pytorch?
+
+- Is a machine learning framework created by facebook in 2016, open source and is based on torch library.
+
+### What are the goals of this?
+
+- Quick to develop and test new ideas
+- Provide good flexibility and high speeds for deep neural nets implementation.
+
+### Where does the need come from?
+
+- Native dynamic graphs and easy to develop and debug.
+- Automatically compute gradients
+- Run in GPU, but API looks almost exactly like numpy
+
+### How to do it?
+
+- Tensors is like a numpy array that run in GPU
+- Autograd is a package for building computational graphs out of tensors, and automatically computing gradients
+- Module is a neural net layer that may store state or learnable weights
+
+**Using Numpy**
+
+```{python}
+import numpy as np
+np.random.seed(0)
+
+N,D = 3,4
+
+x = np.random.randn(N,D)
+y = np.random.randn(N,D)
+z = np.random.randn(N,D)
+
+a = x  * y
+b = a + z
+c = np.sum(b)
+
+print(c)
+
+```
+
+**Using Pytorch**
+
+```{python}
+
+#device = "cuda:0"
+import torch
+N, D  = 3,4
+
+x = torch.randn(N,D, 
+       requires_grad = True)
+       #device = device ) #if we need to run in GPU
+y = torch.randn(N,D)
+z = torch.randn(N,D)
+
+a = x * y
+b = a + z
+c = torch.sum(b)
+
+c.backward()
+print(x.grad)
+
+```
+
+Running example model to train a two-layer ReLU network on random data with L2 loss.
+
+```{python}
+
+import torch
+devide = torch.device('cpu')
+
+#create random tensors for data and weights
+N,D_in, H, D_out = 64, 1000, 100, 10
+x = torch.randn(N, D_in, device = device)
+y = torch.randn(n, D_out, device = device)
+w1 = torch.randn(D_in, H, device = device)
+W2 = torch.randn(H, D_out, device = device)
+
+#compute prediction and loss
+learning_rate = 1e-6
+for t in range(500):
+    h = x.mm(w1)
+    h_relu = h.clamp(min = 0)
+    y_pred = h_relu.mm(w2)
+    loss = (y_pred - y).pow(2).sum()
+
+#backward pass manually compute gradients
+grad_y_pred = 2.0 * (y_pred - y)
+grad_w2 = h_relu.t().mm(grad_y_pred)
+grad_h_relu = grad_y_pred.mm(w2.t())
+grad_h = grad_h_relu.close()
+grad_h[h < 0] = 0
+grad_w1 = x.t().mm(grad_h)
+
+
+#gradient descent step on weights
+w1 -= learning_rate * grad_w1
+w2 -= learnind_rate * grad_w2
+
+```
+
+
+
+
+
+
+### Where is it going, who is going to use it?
+
+-
+
+### What is the expected result?
+
+-
+
+

@@ -1,0 +1,166 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Basics of Pytorch\"\n",
+        "format: html\n",
+        "---\n",
+        "\n",
+        "\n",
+        "### What is Pytorch?\n",
+        "\n",
+        "- Is a machine learning framework created by facebook in 2016, open source and is based on torch library.\n",
+        "\n",
+        "### What are the goals of this?\n",
+        "\n",
+        "- Quick to develop and test new ideas\n",
+        "- Provide good flexibility and high speeds for deep neural nets implementation.\n",
+        "\n",
+        "### Where does the need come from?\n",
+        "\n",
+        "- Native dynamic graphs and easy to develop and debug.\n",
+        "- Automatically compute gradients\n",
+        "- Run in GPU, but API looks almost exactly like numpy\n",
+        "\n",
+        "### How to do it?\n",
+        "\n",
+        "- Tensors is like a numpy array that run in GPU\n",
+        "- Autograd is a package for building computational graphs out of tensors, and automatically computing gradients\n",
+        "- Module is a neural net layer that may store state or learnable weights\n",
+        "\n",
+        "**Using Numpy**\n"
+      ],
+      "id": "3a792319"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "np.random.seed(0)\n",
+        "\n",
+        "N,D = 3,4\n",
+        "\n",
+        "x = np.random.randn(N,D)\n",
+        "y = np.random.randn(N,D)\n",
+        "z = np.random.randn(N,D)\n",
+        "\n",
+        "a = x  * y\n",
+        "b = a + z\n",
+        "c = np.sum(b)\n",
+        "\n",
+        "print(c)"
+      ],
+      "id": "2f66334c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Using Pytorch**\n"
+      ],
+      "id": "041e255b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#device = \"cuda:0\"\n",
+        "import torch\n",
+        "N, D  = 3,4\n",
+        "\n",
+        "x = torch.randn(N,D, \n",
+        "       requires_grad = True)\n",
+        "       #device = device ) #if we need to run in GPU\n",
+        "y = torch.randn(N,D)\n",
+        "z = torch.randn(N,D)\n",
+        "\n",
+        "a = x * y\n",
+        "b = a + z\n",
+        "c = torch.sum(b)\n",
+        "\n",
+        "c.backward()\n",
+        "print(x.grad)"
+      ],
+      "id": "ca45a3f3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Running example model to train a two-layer ReLU network on random data with L2 loss.\n"
+      ],
+      "id": "bf29d127"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import torch\n",
+        "devide = torch.device('cpu')\n",
+        "\n",
+        "#create random tensors for data and weights\n",
+        "N,D_in, H, D_out = 64, 1000, 100, 10\n",
+        "x = torch.randn(N, D_in, device = device)\n",
+        "y = torch.randn(n, D_out, device = device)\n",
+        "w1 = torch.randn(D_in, H, device = device)\n",
+        "W2 = torch.randn(H, D_out, device = device)\n",
+        "\n",
+        "#compute prediction and loss\n",
+        "learning_rate = 1e-6\n",
+        "for t in range(500):\n",
+        "    h = x.mm(w1)\n",
+        "    h_relu = h.clamp(min = 0)\n",
+        "    y_pred = h_relu.mm(w2)\n",
+        "    loss = (y_pred - y).pow(2).sum()\n",
+        "\n",
+        "#backward pass manually compute gradients\n",
+        "grad_y_pred = 2.0 * (y_pred - y)\n",
+        "grad_w2 = h_relu.t().mm(grad_y_pred)\n",
+        "grad_h_relu = grad_y_pred.mm(w2.t())\n",
+        "grad_h = grad_h_relu.close()\n",
+        "grad_h[h < 0] = 0\n",
+        "grad_w1 = x.t().mm(grad_h)\n",
+        "\n",
+        "\n",
+        "#gradient descent step on weights\n",
+        "w1 -= learning_rate * grad_w1\n",
+        "w2 -= learnind_rate * grad_w2"
+      ],
+      "id": "fb5a4197",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Where is it going, who is going to use it?\n",
+        "\n",
+        "-\n",
+        "\n",
+        "### What is the expected result?\n",
+        "\n",
+        "-\n"
+      ],
+      "id": "ef613b0c"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Usuario\\AppData\\Roaming\\Python\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
