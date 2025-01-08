@@ -1,7 +1,6 @@
 
 #goals -----------------------------------
 #visualizations in python using ggplot2 style with plotnine package
-
 #packages
 from plotnine.data import economics_long
 from plotnine import ggplot, aes, geom_line, facet_wrap, labs, theme_xkcd,scale_x_datetime
@@ -22,6 +21,6 @@ economics_long.head(4)
 + labs(
     x = "Period(years)",
     y = "",
-    title = "US economic indicators")
+    title = "U.S. economic indicators")
 + theme_xkcd())
 

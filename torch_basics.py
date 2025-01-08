@@ -1,27 +1,36 @@
+#packages
 import torch
 from matplotlib import pyplot as plt
 
+#data
 x = torch.tensor([1.,2.,3.,4.,5.,6.,7.,8.])
 y = torch.tensor([3.,3.,6.,7.,11.,11.,15.,15.])
 
+#exploration
 plt.scatter(x,y)
 plt.xlabel("Hours of study")
 plt.ylabel("Skill")
 
+#intercept
 w = torch.tensor(0., requires_grad = True)
 
+#linear model
 def Model(x):
     return w * x
 
+#loss function
 def MSE(y_pred, y):
     return ((y_pred - y)**2).mean()
 
+#hyperparams
 n_epochs = 100
 learning_rate = 0.001
 
+#tracker
 w_tracker = []
 loss_tracker = []
 
+#model fit
 for epoch in range(n_epochs):
     #forward pass
     y_pred = Model(x)
@@ -35,8 +44,11 @@ for epoch in range(n_epochs):
     w_tracker.append(w.item())
     w.grad.zero_()
 
+
+#plot results
 fig, (ax1, ax2) = plt.subplots(1,2, figsize = (12,5))
 
+#show results
 for i in range(len(w_tracker)):
     ax1.cla()
     ax2.cla()
@@ -52,7 +64,3 @@ for i in range(len(w_tracker)):
     ax2.set_title("Loss vs Weight")
     ax2.grid()
     ax2.legend()
-
-
-
-

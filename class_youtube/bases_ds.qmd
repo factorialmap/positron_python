@@ -1,0 +1,218 @@
+---
+title: "Classification problems solved by Python sklearn library"
+format: html
+---
+
+First, we need to import the dataset from the scikit-learn library
+
+
+```{python}
+
+from sklearn import datasets
+import pandas as pd
+import numpy as np
+
+data_iris = datasets.load_iris() #get data
+
+```
+
+The dataset contains some keys, which we can use to access specific data. 
+
+For example, if we want to get the data about the length and width of iris flowers, we can specify `iris["data"]`
+
+Next step is converting the dataset to pandas dataframe
+
+```{python}
+
+df_iris = pd.DataFrame(
+    data = np.c_[data_iris["data"], data_iris["target"]],
+    columns= data_iris["feature_names"] + ["target"]
+    )
+```
+
+Now we wil be using Pandas function `head` to see the first few rows of our data frame.
+
+
+```{python}
+
+df_iris.head(5)
+
+```
+
+Create a categorical column and insert names os species in it.
+
+```{python}
+
+species = []
+
+for i in range(len(df_iris["target"])):
+    if df_iris["target"][i] == 0:
+        species.append("setosa")
+    elif df_iris["target"][i] == 1:
+        species.append("versicolor")
+    else:
+        species.append("virginica")
+
+df_iris["species"] = species
+
+```
+
+Make a descriptive statistics
+
+```{python}
+
+df_iris.groupby('species').size()
+
+df_iris.describe()
+
+```
+
+Plotting the iris dataset using matplotlib library
+
+```{python}
+
+import matplotlib.pyplot as plt
+
+df_iris.head(5)
+
+df_iris.columns
+
+df_iris.plot(
+    kind = "scatter",
+    x = 'sepal length (cm)',
+    y = 'sepal width (cm)')
+
+```
+
+Using matplotlib
+
+```{python}
+
+
+
+```
+
+Using Seaborn
+
+```{python}
+
+import seaborn as sns
+
+sns_iris = sns.load_dataset("iris")
+
+sns.pairplot(sns_iris, hue = "species")
+
+```
+
+Plotting iris dataset using plotnine
+
+```{python}
+
+from plotnine import ggplot, aes, geom_point
+
+(
+    ggplot(sns_iris)
+    + aes(x = 'sepal_length', y = 'petal_length', fill = 'species')
+    + geom_point()
+)
+
+
+```
+
+
+Performing a classification model using sklearn library
+
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+#design matrix
+X = df_iris.drop(["target", "species"], axis = 1)
+
+#converting a numpy array petal length petal width
+X = X.to_numpy()[:, (2,3)]
+y = df_iris["target"]
+
+#split  into train and test set
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.5, random_state=42)
+
+```
+
+Now we need to define a logistic model
+
+
+```{python}
+
+from sklearn.linear_model import LogisticRegression
+
+log_reg = LogisticRegression()
+log_reg.fit(X_train, y_train)
+
+```
+
+
+Make predictions using training set
+
+
+```{python}
+
+mdl_pred_logreg_iris = log_reg.predict(X_train)
+
+mdl_pred_logreg_iris
+
+```
+
+Make predictions using the test set
+
+```{python}
+
+tes_prediction = log_reg.predict(X_test)
+
+tes_prediction
+
+```
+
+Measuring performance using training set
+
+```{python}
+
+from sklearn import metrics
+
+print("Precision, Recall, Confusion Matrix, in training\n")
+
+print(metrics.classification_report(y_train, mdl_pred_logreg_iris, digits = 3))
+
+print(metrics.confusion_matrix(y_train, mdl_pred_logreg_iris))
+
+```
+
+Measuring performance using testing 
+
+```{python}
+
+print("Precision, Recall, Confusion Matrix, in testing\n")
+
+print(metrics.classification_report(y_test, tes_prediction, digits = 3))
+
+#confusion matrix
+print(metrics.confusion_matrix(y_test, tes_prediction))
+
+```
+
+Plot confusion matrix
+
+```{python}
+
+from sklearn.metrics import ConfusionMatrixDisplay
+
+mdl_cm = metrics.confusion_matrix(y_test, tes_prediction)
+
+ConfusionMatrixDisplay(mdl_cm).plot()
+
+```
+
+
+
+References
+
+#https://www.pycodemates.com/2022/05/iris-dataset-classification-with-python.html
